@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <button onclick="getRequest()">get请求</button>
+    <br>
+    <button onclick="postRequest()">post请求</button>
+</body>
+<script>
+    function getRequest() {
+        ajax.get('http://127.0.0.1/user?name=hzuhiyao&age=26', function (data) {
+            console.log('get请求', data);
+        })
+    }
+    function postRequest() {
+        ajax.post('http://127.0.0.1/middleWare', { name: "胡智尧", age: 26 }, function (data) {
+            console.log('post请求', data);
+        })
+    }
+    const ajax = {
+        get(url, fun) {
+            var xhr = new XMLHttpRequest()
+            xhr.open('GET', url, false)
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        fun(JSON.parse(xhr.responseText))
+                    }
+                }
+            }
+            xhr.send()
+        },
+        post(url, data, fun) {
+            var xhr = new XMLHttpRequest()
+            xhr.open('POST', url, false)
+            // post函数要有请求头设置
+            xhr.setRequestHeader('Content-type', 'application/json')
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        fun(JSON.parse(xhr.responseText))
+                    }
+                }
+            }
+            xhr.send(JSON.stringify(data))
+        }
+    }
+</script>
+
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    // // get请求
+    // // 创建XMLHttpRequest对象
+    // let xhr = new XMLHttpRequest()
+    // // 建立http连接
+    // xhr.open('GET', 'http://127.0.0.1/user?name=huzhiyao&age=26', true);
+    // // 发送请求
+    // xhr.send()
+    // // 获取返回数据
+    // // 这个地方只有保证链接是异步连接的时候，才能使用这个方法
+    // xhr.onreadystatechange = function () {  //绑定响应状态事件监听函数
+    //     if (xhr.readyState == 4) {  //监听readyState状态
+    //         console.log(JSON.parse(xhr.responseText));
+    //     }
+    // }
+
+    // post请求
+    // 创建XMLHttpRequest对象
+    let xhr = new XMLHttpRequest()
+    // 建立http连接
+    xhr.open('POST', 'http://127.0.0.1/middleWare', true);
+    // post请求要添加请求头
+    xhr.setRequestHeader('Content-type', 'application/json');
+    // 发送请求
+    xhr.send(JSON.stringify({
+        name: 'huzhiyao',
+        age: 27
+    }))
+    // 获取返回数据
+    xhr.onreadystatechange = function () {  //绑定响应状态事件监听函数
+        console.log(xhr);
+        if (xhr.readyState == 4) {  //监听readyState状态
+            console.log(JSON.parse(xhr.responseText));
+        }
+    }
+</script>
+
+</html>
