@@ -12,12 +12,12 @@
 
 </body>
 <script>
-    // function myNew(fn, ...args) {
-    //     const obj = {}
-    //     obj.__proto__ = fn.prototype
-    //     fn.apply(obj, args)
-    //     return obj
-    // }
+    function myNew(fn, ...args) {
+        const obj = {}
+        obj.__proto__ = fn.prototype
+        fn.apply(obj, args)
+        return obj
+    }
     let obj = {}
     console.log(obj);
 </script>

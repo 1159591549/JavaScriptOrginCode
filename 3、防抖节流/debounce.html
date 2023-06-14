@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <button class="debounce">防抖</button><br>
+    <button class="throttle">节流</button><br>
+</body>
+<script>
+    document.getElementsByClassName('debounce')[0].addEventListener('click', debounce(function () {
+        console.log("防抖执行");
+    }))
+    document.getElementsByClassName('throttle')[0].addEventListener('click', throttle(function () {
+        console.log("节流执行");
+    }))
+    // 防抖函数
+    function debounce(fun, delay = 500) {
+        let timeout = null // 创建一个标记用来存放定时器的返回值
+        return function () {
+            clearTimeout(timeout) // 每当用户输入的时候把前一个 setTimeout clear 掉
+            timeout = setTimeout(() => {
+                fun.apply(this, arguments)
+            }, delay)
+        }
+    }
+
+    function throttle(fun, delay = 500) {
+        let flag = true
+        let timer
+        return function (...args) {
+            if (!flag) {
+                return
+            }
+            flag = false
+            timer = setTimeout(function () {
+                fun(args)
+                flag = true
+                clearTimeout(timer)
+            }, delay)
+        }
+    }
+</script>
+
+</html>
