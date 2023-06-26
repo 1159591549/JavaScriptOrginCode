@@ -22,5 +22,7 @@ const compose = (...fns) => {
         }
     })
 }
+// 实现：接收多个函数作为参数，从右到左，一个函数的输入为另一个函数的输出
+// 作用：实现函数式编程中的 pointfree 风格（无参数），使我们专注于【转换】而不是【数据】
 const a = compose(fn1, fn2, fn3, fn4)
 console.log(a(1)); 
