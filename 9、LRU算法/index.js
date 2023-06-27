@@ -30,7 +30,7 @@ class LRUCache {
             this.cache.delete(key)
         }
         this.cache.set(key, value)
-        // 当元素容量大于约定好的容量，要插入元素，并剔除首部元素
+        // 当元素容量大于约定好的size容量，要插入元素，并剔除首部元素
         if (this.cache.size > this.size) {
             // 移除首部元素
             this.cache.delete(this.cache.keys().next().value)
