@@ -7,12 +7,12 @@ const flatten = obj => {
     const dfs = (cur, prefix) => {
         if (isObject(cur)) {
             if (Array.isArray(cur)) {
-                for (let i in cur) {
-                    dfs(cur[i], `${prefix}[${i}]`)
+                for (let index in cur) {
+                    dfs(cur[index], `${prefix}[${index}]`)
                 }
             } else {
-                for (let i in cur) {
-                    dfs(cur[i], `${prefix}${prefix ? '.' : ''}${i}`)
+                for (let key in cur) {
+                    dfs(cur[key], `${prefix}${prefix ? '.' : ''}${key}`)
                 }
             }
         } else {
