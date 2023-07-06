@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    let str = '0123456789'
+    let temp = ''
+    // 先做一个 10KB 的字符串
+    while (str.length !== 10240) {
+        str = str + '0123456789'
+    }
+
+    // 先清空
+    localStorage.clear()
+
+    const computedTotal = () => {
+        return new Promise((resolve) => {
+            // 不断往 LocalStorage 中累积存储 10KB
+            const timer = setInterval(() => {
+                try {
+                    localStorage.setItem('temp', temp)
+                } catch {
+                    // 报错说明超出最大存储
+                    resolve(temp.length / 1024 - 10)
+                    clearInterval(timer)
+                    // 统计完记得清空
+                    localStorage.clear()
+                }
+                temp += str
+            }, 0)
+        })
+    }
+
+    (async () => {
+        const total = await computedTotal()
+        console.log(`最大容量${total}KB`)
+    })()
+</script>
+
+</html>
