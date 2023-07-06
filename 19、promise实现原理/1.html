@@ -1,20 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="HD.js"></script>
 </head>
+
 <body>
-    
+
 </body>
 <script>
     let p = new HD((resolve, reject) => {
-        // resolve('解决')
-        reject('拒绝')
+        setTimeout(() => {
+            resolve('解决')
+            // 优先执行同步代码块
+            console.log("向军大叔");
+        }, 1000)
     }).then(value => {
+        // 里面可能报错 执行具体函数的时候需要用try catch包裹
         console.log(value);
+    }, reason => {
+        console.log(reason);
     })
+    console.log("houdunren");
 </script>
+
 </html>

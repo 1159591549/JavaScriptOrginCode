@@ -18,8 +18,11 @@ class HD {
         if (this.status === HD.PEDDING) {
             this.status = HD.FUFILLED
             this.value = value
-            this.callbacks.map(callback => {
-                callback.onFulfilled(value)
+            // 优先执行同步代码块
+            setTimeout(() => {
+                this.callbacks.map(callback => {
+                    callback.onFulfilled(value)
+                })
             })
         }
     }
@@ -28,8 +31,11 @@ class HD {
         if (this.status === HD.PEDDING) {
             this.status = HD.REJECTED
             this.value = resaon
-            this.callbacks.map(callback => {
-                callback.onReject(resaon)
+            // 优先执行同步代码块
+            setTimeout(() => {
+                this.callbacks.map(callback => {
+                    callback.onReject(resaon)
+                })
             })
         }
     }
@@ -44,8 +50,23 @@ class HD {
         // 当promise里面包含setTimeout时候，这个时候要把回调函数收集起来，待执行完resolve的时候再执行
         if (this.status === HD.PEDDING) {
             this.callbacks.push({
-                onFulfilled,
-                onReject
+                onFulfilled: value => {
+                    // 执行报错的时候要进行错误收集
+                    try {
+                        onFulfilled(value)
+                    } catch (error) {
+                        onReject(error)
+                    }
+
+                },
+                onReject: value => {
+                    // 执行报错的时候要进行错误收集
+                    try {
+                        onReject(value)
+                    } catch (error) {
+                        onReject(error)
+                    }
+                }
             })
         }
         // 只有执行了resolve将状态变成fulfilled的时候才可以执行回调函数
