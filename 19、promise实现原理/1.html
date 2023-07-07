@@ -12,19 +12,26 @@
 
 </body>
 <script>
+    // let p = new HD((resolve, reject) => {
+    //     setTimeout(() => {
+    //         resolve('解决')
+    //         // 优先执行同步代码块
+    //         console.log("向军大叔");
+    //     }, 1000)
+    // }).then(value => {
+    //     // 里面可能报错 执行具体函数的时候需要用try catch包裹
+    //     console.log(value);
+    // }, reason => {
+    //     console.log(reason);
+    // })
+    // console.log("houdunren");
     let p = new HD((resolve, reject) => {
-        setTimeout(() => {
-            resolve('解决')
-            // 优先执行同步代码块
-            console.log("向军大叔");
-        }, 1000)
+        resolve('解决')
     }).then(value => {
-        // 里面可能报错 执行具体函数的时候需要用try catch包裹
         console.log(value);
-    }, reason => {
-        console.log(reason);
+    }).then(value => {
+
     })
-    console.log("houdunren");
 </script>
 
 </html>

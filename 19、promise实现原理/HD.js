@@ -47,50 +47,52 @@ class HD {
         if (typeof onReject !== 'function') {
             onReject = () => { }
         }
-        // 当promise里面包含setTimeout时候，这个时候要把回调函数收集起来，待执行完resolve的时候再执行
-        if (this.status === HD.PEDDING) {
-            this.callbacks.push({
-                onFulfilled: value => {
-                    // 执行报错的时候要进行错误收集
-                    try {
-                        onFulfilled(value)
-                    } catch (error) {
-                        onReject(error)
-                    }
+        return new HD((resolve, reject) => {
+            // 当promise里面包含setTimeout时候，这个时候要把回调函数收集起来，待执行完resolve的时候再执行
+            if (this.status === HD.PEDDING) {
+                this.callbacks.push({
+                    onFulfilled: value => {
+                        // 执行报错的时候要进行错误收集
+                        try {
+                            onFulfilled(value)
+                        } catch (error) {
+                            onReject(error)
+                        }
 
-                },
-                onReject: value => {
-                    // 执行报错的时候要进行错误收集
+                    },
+                    onReject: value => {
+                        // 执行报错的时候要进行错误收集
+                        try {
+                            onReject(value)
+                        } catch (error) {
+                            onReject(error)
+                        }
+                    }
+                })
+            }
+            // 只有执行了resolve将状态变成fulfilled的时候才可以执行回调函数
+            if (this.status === HD.FUFILLED) {
+                // promise代码要晚于同步代码块执行顺序 异步执行
+                setTimeout(() => {
+                    // 防止函数执行出现错误要用代码块包裹
                     try {
-                        onReject(value)
+                        onFulfilled(this.value)
                     } catch (error) {
                         onReject(error)
                     }
-                }
-            })
-        }
-        // 只有执行了resolve将状态变成fulfilled的时候才可以执行回调函数
-        if (this.status === HD.FUFILLED) {
-            // promise代码要晚于同步代码块执行顺序 异步执行
-            setTimeout(() => {
-                // 防止函数执行出现错误要用代码块包裹
-                try {
-                    onFulfilled(this.value)
-                } catch (error) {
-                    onReject(error)
-                }
-            })
-        }
-        if (this.status === HD.REJECTED) {
-            // promise代码要晚于同步代码块执行顺序 异步执行
-            setTimeout(() => {
-                // 防止函数执行出现错误要用代码块包裹
-                try {
-                    onReject(this.value)
-                } catch (error) {
-                    onReject(error)
-                }
-            })
-        }
+                })
+            }
+            if (this.status === HD.REJECTED) {
+                // promise代码要晚于同步代码块执行顺序 异步执行
+                setTimeout(() => {
+                    // 防止函数执行出现错误要用代码块包裹
+                    try {
+                        onReject(this.value)
+                    } catch (error) {
+                        onReject(error)
+                    }
+                })
+            }
+        })
     }
 }
