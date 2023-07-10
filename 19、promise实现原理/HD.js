@@ -56,7 +56,11 @@ class HD {
                         // 执行报错的时候要进行错误收集
                         try {
                             let result = onFulfilled(value)
-                            resolve(result)
+                            if (result instanceof HD) {
+                                result.then(resolve, reject)
+                            }else{
+                                resolve(result)
+                            }
                         } catch (error) {
                             reject(error)
                         }
@@ -79,7 +83,11 @@ class HD {
                     // 防止函数执行出现错误要用代码块包裹
                     try {
                         let result = onFulfilled(this.value)
-                        resolve(result)
+                        if (result instanceof HD) {
+                            result.then(resolve, reject)
+                        }else{
+                            resolve(result)
+                        }
                     } catch (error) {
                         reject(error)
                     }
@@ -91,7 +99,11 @@ class HD {
                     // 防止函数执行出现错误要用代码块包裹
                     try {
                         let result = onReject(this.value)
-                        resolve(result)
+                        if (result instanceof HD) {
+                            result.then(resolve, reject)
+                        }else{
+                            resolve(result)
+                        }
                     } catch (error) {
                         reject(error)
                     }
