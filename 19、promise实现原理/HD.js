@@ -54,7 +54,8 @@ class HD {
                     onFulfilled: value => {
                         // 执行报错的时候要进行错误收集
                         try {
-                            onFulfilled(value)
+                            let result = onFulfilled(value)
+                            resolve(result)
                         } catch (error) {
                             onReject(error)
                         }
@@ -63,7 +64,8 @@ class HD {
                     onReject: value => {
                         // 执行报错的时候要进行错误收集
                         try {
-                            onReject(value)
+                            let result = onReject(value)
+                            resolve(result)
                         } catch (error) {
                             onReject(error)
                         }
@@ -76,7 +78,8 @@ class HD {
                 setTimeout(() => {
                     // 防止函数执行出现错误要用代码块包裹
                     try {
-                        onFulfilled(this.value)
+                        let result = onFulfilled(this.value)
+                        resolve(result)
                     } catch (error) {
                         onReject(error)
                     }
@@ -87,7 +90,8 @@ class HD {
                 setTimeout(() => {
                     // 防止函数执行出现错误要用代码块包裹
                     try {
-                        onReject(this.value)
+                        let result = onReject(this.value)
+                        resolve(result)
                     } catch (error) {
                         onReject(error)
                     }
