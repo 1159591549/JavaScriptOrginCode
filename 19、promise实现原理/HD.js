@@ -53,26 +53,10 @@ class HD {
             if (this.status === HD.PEDDING) {
                 this.callbacks.push({
                     onFulfilled: value => {
-                        // 执行报错的时候要进行错误收集
-                        try {
-                            let result = onFulfilled(value)
-                            if (result instanceof HD) {
-                                result.then(resolve, reject)
-                            }else{
-                                resolve(result)
-                            }
-                        } catch (error) {
-                            reject(error)
-                        }
+                        this.parse(onFulfilled(value), resolve, reject)
                     },
                     onReject: value => {
-                        // 执行报错的时候要进行错误收集
-                        try {
-                            let result = onReject(value)
-                            resolve(result)
-                        } catch (error) {
-                            reject(error)
-                        }
+                        this.parse(onReject(value), resolve, reject)
                     }
                 })
             }
@@ -81,34 +65,27 @@ class HD {
                 // promise代码要晚于同步代码块执行顺序 异步执行
                 setTimeout(() => {
                     // 防止函数执行出现错误要用代码块包裹
-                    try {
-                        let result = onFulfilled(this.value)
-                        if (result instanceof HD) {
-                            result.then(resolve, reject)
-                        }else{
-                            resolve(result)
-                        }
-                    } catch (error) {
-                        reject(error)
-                    }
+                    this.parse(onFulfilled(this.value), resolve, reject)
                 })
             }
             if (this.status === HD.REJECTED) {
                 // promise代码要晚于同步代码块执行顺序 异步执行
                 setTimeout(() => {
                     // 防止函数执行出现错误要用代码块包裹
-                    try {
-                        let result = onReject(this.value)
-                        if (result instanceof HD) {
-                            result.then(resolve, reject)
-                        }else{
-                            resolve(result)
-                        }
-                    } catch (error) {
-                        reject(error)
-                    }
+                    this.parse(onReject(this.value), resolve, reject)
                 })
             }
         })
+    }
+    parse(result, resolve, reject) {
+        try {
+            if (result instanceof HD) {
+                result.then(resolve, reject)
+            } else {
+                resolve(result)
+            }
+        } catch (error) {
+            reject(error)
+        }
     }
 }
