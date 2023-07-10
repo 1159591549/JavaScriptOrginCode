@@ -42,10 +42,11 @@ class HD {
     then(onFulfilled, onReject) {
         // 防止用户使用的时候不传递函数或者少传函数
         if (typeof onFulfilled !== 'function') {
-            onFulfilled = () => { }
+            // then的穿透效果，当then里面没有传递参数的时候，把上一个promise的value值放到下一个promise中
+            onFulfilled = () => this.value
         }
         if (typeof onReject !== 'function') {
-            onReject = () => { }
+            onReject = () => this.value
         }
         return new HD((resolve, reject) => {
             // 当promise里面包含setTimeout时候，这个时候要把回调函数收集起来，待执行完resolve的时候再执行
@@ -57,9 +58,8 @@ class HD {
                             let result = onFulfilled(value)
                             resolve(result)
                         } catch (error) {
-                            onReject(error)
+                            reject(error)
                         }
-
                     },
                     onReject: value => {
                         // 执行报错的时候要进行错误收集
@@ -67,7 +67,7 @@ class HD {
                             let result = onReject(value)
                             resolve(result)
                         } catch (error) {
-                            onReject(error)
+                            reject(error)
                         }
                     }
                 })
@@ -81,7 +81,7 @@ class HD {
                         let result = onFulfilled(this.value)
                         resolve(result)
                     } catch (error) {
-                        onReject(error)
+                        reject(error)
                     }
                 })
             }
@@ -93,7 +93,7 @@ class HD {
                         let result = onReject(this.value)
                         resolve(result)
                     } catch (error) {
-                        onReject(error)
+                        reject(error)
                     }
                 })
             }
