@@ -59,19 +59,37 @@
     // // })
 
     // 5、promise的all方法
+    // let p1 = new HD((resolve, reject) => {
+    //     resolve('成功1')
+    //     // reject('失败1')
+    // })
+    // let p2 = new HD((resolve, reject) => {
+    //     resolve('成功2')
+    //     // reject('失败2')
+    // })
+    // HD.all([p1, p2]).then(value => {
+    //     console.log(value);
+    // }, reason => {
+    //     console.log(reason);
+    // })
+
+    // 6、promise的race方法 那个promise里面的
     let p1 = new HD((resolve, reject) => {
-        resolve('成功1')
-        // reject('失败1')
+        setTimeout(() => {
+            resolve('成功1')
+        },200)
     })
     let p2 = new HD((resolve, reject) => {
-        resolve('成功2')
-        // reject('失败2')
+        setTimeout(() => {
+            reject('失败2')
+        }, 1000)
     })
-    HD.all([p1, p2]).then(value => {
+    HD.race([p1, p2]).then(value => {
         console.log(value);
     }, reason => {
         console.log(reason);
     })
+
 </script>
 
 </html>

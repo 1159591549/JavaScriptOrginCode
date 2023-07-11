@@ -120,6 +120,16 @@ class HD {
                 })
             })
         })
-
+    }
+    static race(promises) {
+        return new HD((resolve, reject) => {
+            promises.map(promise => {
+                promise.then(value => {
+                    resolve(value)
+                }, reason => {
+                    reject(reason)
+                })
+            })
+        })
     }
 }
