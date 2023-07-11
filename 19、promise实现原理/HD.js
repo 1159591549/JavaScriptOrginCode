@@ -48,15 +48,15 @@ class HD {
         if (typeof onReject !== 'function') {
             onReject = () => this.value
         }
-        return new HD((resolve, reject) => {
+        let promise =  new HD((resolve, reject) => {
             // 当promise里面包含setTimeout时候，这个时候要把回调函数收集起来，待执行完resolve的时候再执行
             if (this.status === HD.PEDDING) {
                 this.callbacks.push({
                     onFulfilled: value => {
-                        this.parse(onFulfilled(value), resolve, reject)
+                        this.parse(promise, onFulfilled(value), resolve, reject)
                     },
                     onReject: value => {
-                        this.parse(onReject(value), resolve, reject)
+                        this.parse(promise, onReject(value), resolve, reject)
                     }
                 })
             }
@@ -65,19 +65,23 @@ class HD {
                 // promise代码要晚于同步代码块执行顺序 异步执行
                 setTimeout(() => {
                     // 防止函数执行出现错误要用代码块包裹
-                    this.parse(onFulfilled(this.value), resolve, reject)
+                    this.parse(promise, onFulfilled(this.value), resolve, reject)
                 })
             }
             if (this.status === HD.REJECTED) {
                 // promise代码要晚于同步代码块执行顺序 异步执行
                 setTimeout(() => {
                     // 防止函数执行出现错误要用代码块包裹
-                    this.parse(onReject(this.value), resolve, reject)
+                    this.parse(promise, onReject(this.value), resolve, reject)
                 })
             }
         })
+        return promise
     }
-    parse(result, resolve, reject) {
+    parse(promise, result, resolve, reject) {
+        if (promise === result) {
+            throw TypeError('Chaining cycle dected!')
+        }
         try {
             if (result instanceof HD) {
                 result.then(resolve, reject)

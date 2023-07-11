@@ -12,6 +12,7 @@
 
 </body>
 <script>
+    // 1、promise初始化
     // let p = new HD((resolve, reject) => {
     //     setTimeout(() => {
     //         resolve('解决')
@@ -25,12 +26,20 @@
     //     console.log(reason);
     // })
     // console.log("houdunren");
-    let p = new HD((resolve, reject) => {
-        resolve('解决')
-    }).then(value => {
-        console.log(value);
-    }).then(value => {
+    // 2、promsie链式编程
+    // let p = new HD((resolve, reject) => {
+    //     resolve('解决')
+    // }).then(value => {
+    //     console.log(value);
+    // }).then(value => {
 
+    // })
+    // 3、promise返回类型约束---不可以将promise自身返回
+    let promise = new HD((resolve, reject) => {
+        resolve('解决')
+    })
+    let p = promise.then(value => {
+        return p
     })
 </script>
 
