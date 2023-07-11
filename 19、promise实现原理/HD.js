@@ -101,9 +101,25 @@ class HD {
             }
         })
     }
-    static reject(resaon){
+    static reject(resaon) {
         return new HD((resolve, reject) => {
             reject(resaon)
         })
+    }
+    static all(promises) {
+        const values = []
+        return new HD((resolve, reject) => {
+            promises.forEach(promise => {
+                promise.then(value => {
+                    values.push(value)
+                    if (values.length === promises.length) {
+                        resolve(values)
+                    }
+                }, reason => {
+                    reject(reason)
+                })
+            })
+        })
+
     }
 }
