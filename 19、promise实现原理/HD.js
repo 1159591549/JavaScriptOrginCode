@@ -48,7 +48,7 @@ class HD {
         if (typeof onReject !== 'function') {
             onReject = () => this.value
         }
-        let promise =  new HD((resolve, reject) => {
+        let promise = new HD((resolve, reject) => {
             // 当promise里面包含setTimeout时候，这个时候要把回调函数收集起来，待执行完resolve的时候再执行
             if (this.status === HD.PEDDING) {
                 this.callbacks.push({
@@ -91,5 +91,19 @@ class HD {
         } catch (error) {
             reject(error)
         }
+    }
+    static resolve(value) {
+        return new HD((resolve, reject) => {
+            if (value instanceof HD) {
+                value.then(resolve, reject)
+            } else {
+                resolve(value)
+            }
+        })
+    }
+    static reject(resaon){
+        return new HD((resolve, reject) => {
+            reject(resaon)
+        })
     }
 }
