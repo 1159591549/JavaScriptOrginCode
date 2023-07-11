@@ -19,7 +19,7 @@ Array.prototype.sx_filter = function (cb) {
 }
 Array.prototype.sx_every = function (cb) {
     for (let i = 0; i < this.length; i++) {
-        if (!cb && cb(this[i], i, this)) {
+        if (cb && !cb(this[i], i, this)) {
             return false
         }
     }
