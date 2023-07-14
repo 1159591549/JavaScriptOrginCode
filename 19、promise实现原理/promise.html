@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./promise.js"></script>
+</head>
+
+<body>
+
+</body>
+<script>
+    // Mpromise.RESOLVE('成功').then(value => {
+    //     console.log(value);
+    // }, resaon => {
+    //     console.log(resaon);
+    // })
+    // Mpromise.REJECT('失败').then(value => {
+    //     console.log(value,"222222222222222222222");
+    // }, resaon => {
+    //     console.log(resaon,"11111111111111111");
+    // })
+    let p1 = new Mpromise((resolve, reject) => {
+        setTimeout(() => {
+            resolve('p1')
+        }, 2000)
+    })
+    let p2 = new Mpromise((resolve, reject) => {
+        setTimeout(() => {
+            resolve('p2')
+        }, 1000)
+    })
+    Mpromise.RACE([p1, p2]).then(res => {
+        console.log(res);
+    }, reason => {
+        console.log(reason);
+    })
+</script>
+
+</html>
