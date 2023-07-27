@@ -12,17 +12,41 @@
 
 </body>
 <script>
-    function myNew(fn, ...args) {
-        // 创建一个空对象
-        const obj = {}
-        // 将空对象的原型指向构造函数的原型
-        obj.__proto__ = fn.prototype
-        // 执行构造函数
-        fn.apply(obj, args)
-        return obj
+    // 基于Object.create
+    // 1、在内存中创建一个新对象;
+    // 2、将新对象的 [[Prototype]] 被赋值为构造函数的 prototype 属性;
+    // 3、将构造函数中的 this 指向新对象;
+    // 4、执行构造函数中的代码;
+    // 5、如果构造函数返回非空对象，则返回该对象；否则返回刚创建的新对象。
+    function new2(Constructor, ...args) {
+        var obj = Object.create(null);
+        obj.__proto__ = Constructor.prototype;
+        var result = Constructor.apply(obj, args);
+        return typeof result === 'object' ? result : obj;
     }
-    let obj = {}
-    console.log(obj);
+
+    // 基于new Object()
+    function new3() {
+        // 基于 new Object 创建实例
+        var obj = new Object(),
+        // 获取外部传入的构造器
+        Constructor = Array.prototype.shift.call(arguments);
+        // 手写 Object.create() 的核心
+        var F = function () { }
+        F.prototype = Constructor.prototype
+        // 指向正确的原型
+        obj = new F()
+        // 借用外部传入的构造函数给 obj 设置属性
+        var result = Constructor.apply(obj, arguments)
+        // 执行结果如果是非空对象，则返回该对象；否则，返回刚创建的新对象
+        return typeof result === 'object' ? result : obj
+    }
+    function User(firstname, lastname) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+    }
+    const user2 = new2(User, 'johnny', 'joestar')
+    const user3 = new3(User, 'johnny', 'joestar')
 </script>
 
 </html>
